@@ -232,12 +232,48 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Ohmni welcome you', textAlign: TextAlign.center),
-        backgroundColor: Colors.green,
+        elevation: 20,
+        backgroundColor: const ui.Color.fromARGB(255, 58, 202, 140),
+        titleSpacing: screenHeight * 0.02, // Canh chỉnh tiêu đề
+        title: Row(
+          mainAxisAlignment:
+              MainAxisAlignment.start, // Căn giữa logo và tiêu đề
+
+          children: [
+            Padding(
+              padding: EdgeInsets.only(left: screenWidth * 0.02),
+              child: Image.asset(
+                'assets/logo.jpg', // Đường dẫn logo
+                height: screenHeight * 0.1,
+                width: screenHeight * 0.1,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: screenWidth * 0.25),
+              child: const Text(
+                'Ohmni welcomes you',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  shadows: [
+                    Shadow(
+                      offset: Offset(2.0, 2.0),
+                      blurRadius: 3.0,
+                      color: Colors.grey,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
       body: Center(
         child: Column(
@@ -246,62 +282,111 @@ class _HomePageState extends State<HomePage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      FloatingActionButton(
-                        onPressed: _toggleCamera,
-                        child: Icon(
-                            _isCameraStopped ? Icons.videocam : Icons.stop),
-                      ),
-                      SizedBox(height: 16),
-                      FloatingActionButton(
-                        onPressed: _captureAndQuery,
-                        child: Icon(Icons.camera),
-                      ),
-                    ],
-                  ),
+                  Padding(padding: EdgeInsets.only(left: screenWidth * 0.02)),
                   Expanded(
+                    flex: 4,
                     child: Container(
                       margin: const EdgeInsets.all(10.0),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black26,
-                            blurRadius: 8,
-                            spreadRadius: 4,
+                        // boxShadow: const [
+                        //   BoxShadow(
+                        //     color: Colors.black26,
+                        //     blurRadius: 8,
+                        //     spreadRadius: 4,
+                        //   ),
+                        // ],
+                      ),
+                      clipBehavior: Clip.hardEdge,
+                      child: Column(
+                        children: [
+                          // Phần trên: hiển thị video (chiếm 80%)
+                          Expanded(
+                            flex: 9, // Tỷ lệ 8 phần cho phần trên
+                            child: _cameraAvailable
+                                ? const HtmlElementView(
+                                    viewType: 'videoElement',
+                                  )
+                                : Container(
+                                    decoration: BoxDecoration(
+                                      color:
+                                          Colors.black, // Màu nền của container
+                                      borderRadius: BorderRadius.circular(
+                                          16), // Bo góc 16px
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey
+                                              .withOpacity(0.5), // Màu đổ bóng
+                                          spreadRadius: 4, // Bán kính lan tỏa
+                                          blurRadius: 5, // Độ mờ của bóng
+                                          offset: const Offset(
+                                              0, 3), // Đổ bóng theo trục x, y
+                                        ),
+                                      ],
+                                    ),
+                                    // color: Colors.black,
+                                    child: const Center(
+                                      child: Text(
+                                        'Camera not available',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                          ),
+                          // Phần dưới: hiển thị các nút (chiếm 20%)
+                          Expanded(
+                            flex: 1, // Tỷ lệ 2 phần cho phần dưới
+                            child: Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .center, // Căn giữa các icon
+                                children: [
+                                  FloatingActionButton(
+                                    onPressed: _toggleCamera,
+                                    child: Icon(
+                                      _isCameraStopped
+                                          ? Icons.videocam
+                                          : Icons.stop,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                      width: 16), // Khoảng cách giữa các nút
+                                  FloatingActionButton(
+                                    onPressed: _captureAndQuery,
+                                    child: const Icon(Icons.camera),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
-                      clipBehavior: Clip.hardEdge,
-                      child: _cameraAvailable
-                          ? const HtmlElementView(viewType: 'videoElement')
-                          : Container(
-                              color: Colors.black,
-                              child: const Center(
-                                child: Text(
-                                  'Camera not available',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Container(
+                      margin: const EdgeInsets.all(10.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            _recognitionResult,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              color: Colors.red,
                             ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-            Text(
-              _recognitionResult,
-              style: const TextStyle(
-                fontSize: 20,
-                color: Colors.red,
-              ),
-            ),
-            const SizedBox(height: 16),
           ],
         ),
       ),
