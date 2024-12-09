@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'dart:convert';
+import 'chat_widget.dart';
 
 void main() {
   runApp(OhmniWelcomeYou());
@@ -232,30 +233,27 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
+    final screenheight = MediaQuery.of(context).size.height;
+    final screenwidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 20,
-        backgroundColor: const ui.Color.fromARGB(255, 58, 202, 140),
-        titleSpacing: screenHeight * 0.02, // Canh chỉnh tiêu đề
+        backgroundColor: const ui.Color.fromARGB(255, 171, 226, 255),
+        titleSpacing: screenheight * 0.02,
         title: Row(
-          mainAxisAlignment:
-              MainAxisAlignment.start, // Căn giữa logo và tiêu đề
-
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: screenWidth * 0.02),
+              padding: EdgeInsets.only(left: screenwidth * 0.01),
               child: Image.asset(
-                'assets/logo.jpg', // Đường dẫn logo
-                height: screenHeight * 0.1,
-                width: screenHeight * 0.1,
+                'assets/logo_clb.png',
+                height: screenheight * 0.06,
+                width: screenheight * 0.06,
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(left: screenWidth * 0.25),
+              padding: EdgeInsets.only(left: screenwidth * 0.25),
               child: const Text(
                 'Ohmni welcomes you',
                 style: TextStyle(
@@ -275,110 +273,66 @@ class _HomePageState extends State<HomePage> {
           ],
         ),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Padding(padding: EdgeInsets.only(left: screenwidth * 0.01)),
+          Expanded(
+            flex: 4,
+            child: Container(
+              margin: EdgeInsets.all(screenwidth * 0.01),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Column(
                 children: [
-                  Padding(padding: EdgeInsets.only(left: screenWidth * 0.02)),
                   Expanded(
-                    flex: 4,
-                    child: Container(
-                      margin: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        // boxShadow: const [
-                        //   BoxShadow(
-                        //     color: Colors.black26,
-                        //     blurRadius: 8,
-                        //     spreadRadius: 4,
-                        //   ),
-                        // ],
-                      ),
-                      clipBehavior: Clip.hardEdge,
-                      child: Column(
-                        children: [
-                          // Phần trên: hiển thị video (chiếm 80%)
-                          Expanded(
-                            flex: 9, // Tỷ lệ 8 phần cho phần trên
-                            child: _cameraAvailable
-                                ? const HtmlElementView(
-                                    viewType: 'videoElement',
-                                  )
-                                : Container(
-                                    decoration: BoxDecoration(
-                                      color:
-                                          Colors.black, // Màu nền của container
-                                      borderRadius: BorderRadius.circular(
-                                          16), // Bo góc 16px
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.grey
-                                              .withOpacity(0.5), // Màu đổ bóng
-                                          spreadRadius: 4, // Bán kính lan tỏa
-                                          blurRadius: 5, // Độ mờ của bóng
-                                          offset: const Offset(
-                                              0, 3), // Đổ bóng theo trục x, y
-                                        ),
-                                      ],
-                                    ),
-                                    // color: Colors.black,
-                                    child: const Center(
-                                      child: Text(
-                                        'Camera not available',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 16,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                          ),
-                          // Phần dưới: hiển thị các nút (chiếm 20%)
-                          Expanded(
-                            flex: 1, // Tỷ lệ 2 phần cho phần dưới
-                            child: Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .center, // Căn giữa các icon
-                                children: [
-                                  FloatingActionButton(
-                                    onPressed: _toggleCamera,
-                                    child: Icon(
-                                      _isCameraStopped
-                                          ? Icons.videocam
-                                          : Icons.stop,
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                      width: 16), // Khoảng cách giữa các nút
-                                  FloatingActionButton(
-                                    onPressed: _captureAndQuery,
-                                    child: const Icon(Icons.camera),
-                                  ),
-                                ],
+                    flex: 9,
+                    child: _cameraAvailable
+                        ? const HtmlElementView(
+                            viewType: 'videoElement',
+                          )
+                        : Container(
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.grey.withOpacity(0.5),
+                                  spreadRadius: 4,
+                                  blurRadius: 5,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const Center(
+                              child: Text(
+                                'Camera not available',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                ),
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
                   ),
                   Expanded(
                     flex: 1,
-                    child: Container(
-                      margin: const EdgeInsets.all(10.0),
-                      child: Column(
+                    child: Center(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            _recognitionResult,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              color: Colors.red,
+                          FloatingActionButton(
+                            onPressed: _toggleCamera,
+                            child: Icon(
+                              _isCameraStopped ? Icons.videocam : Icons.stop,
                             ),
+                          ),
+                          const SizedBox(width: 16),
+                          FloatingActionButton(
+                            onPressed: _captureAndQuery,
+                            child: const Icon(Icons.camera),
                           ),
                         ],
                       ),
@@ -387,8 +341,9 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
-          ],
-        ),
+          ),
+          ChatWidget(),
+        ],
       ),
     );
   }
